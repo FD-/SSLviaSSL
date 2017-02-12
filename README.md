@@ -1,7 +1,7 @@
 # SSLviaSSL
 This project demonstrates that creating an SSLSocket over an existing SSLSocket does not work on Android.
 
-The app tries to send an HTTP request to an HTTPS server via a Secure Web Proxy.
+The app tries to send an HTTP request to an HTTPS server via a Secure Web Proxy (HTTP proxy over SSL/TLS).
 
 # Using the project
 To use the project, run a Secure Web Proxy using the steps below and modify PROXY_HOST and PROXY_PORT in Main.java accordingly. These values will be used as defaults when starting the Android app. Via the EditTexts, the values can be modified in the app.
