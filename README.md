@@ -3,6 +3,28 @@ This project demonstrates that creating an SSLSocket over an existing SSLSocket 
 
 The app tries to send an HTTP request to an HTTPS server via a Secure Web Proxy.
 
+# Using the project
+To use the project, run a Secure Web Proxy using the steps below and modify PROXY_HOST and PROXY_PORT in Main.java accordingly. These values will be used as defaults when starting the Android app. Via the EditTexts, the values can be modified in the app.
+The main.java class can be run in the desktop JRE directly from within Android Studio. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within Android Studio's console.
+
+# The issue
+When running the app on Android and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the Android app and the HTTPS server) fails with this exception:
+
+    javax.net.ssl.SSLHandshakeException: Handshake failed
+        at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:429)
+        at com.bugreport.sslviassl.SecureWebProxyThread.doSSLHandshake(SecureWebProxyThread.java:147)
+        at com.bugreport.sslviassl.SecureWebProxyThread.run(SecureWebProxyThread.java:216)
+    Caused by: javax.net.ssl.SSLProtocolException: SSL handshake aborted: ssl=0x74621f1a40: Failure in SSL library, usually a protocol error
+    error:100000e3:SSL routines:OPENSSL_internal:UNKNOWN_ALERT_TYPE (external/boringssl/src/ssl/s3_pkt.c:618 0x74705b3e7e:0x00000000)
+        at com.android.org.conscrypt.NativeCrypto.SSL_do_handshake(Native Method)
+        at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:357)
+    	... 2 more        
+        
+This exception does not happen if the same code is run in a desktop JRE (which you can try by running Main.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) on Android.   
+
+# TCPDUMP
+I added tcpdumps of two runs to the `tcpdumps` directory.
+
 #  How to set up a [Secure Web Proxy][1]:
 These steps were tested on a vanilla Ubuntu 14.04 image.
 
