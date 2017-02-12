@@ -78,7 +78,7 @@ These steps were tested on a vanilla Ubuntu 14.04 image.
 
         sudo nano /etc/stunnel/stunnel.conf
 
-Use a config file like this:
+    Use a config file like this:
 
         client = no
         [squid]
