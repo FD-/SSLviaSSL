@@ -96,7 +96,7 @@ Use a config file like this:
         HTTP/1.1 302 Moved Temporarily
         Cache-Control: private
         Content-Type: text/html; charset=UTF-8
-        Location: http://www.google.at/?gfe_rd=cr&ei=4aSgWJ2yHPPM8geUlIz4DQ
+        Location: http://www.google.{depends on your location}
         Content-Length: 258
         Date: Sun, 12 Feb 2017 18:09:37 GMT
         X-Cache: MISS from ubuntu
@@ -108,7 +108,7 @@ Use a config file like this:
         <TITLE>302 Moved</TITLE></HEAD><BODY>
         <H1>302 Moved</H1>
         The document has moved
-        <A HREF="http://www.google.at/?gfe_rd=cr&amp;ei=4aSgWJ2yHPPM8geUlIz4DQ">here</A>.
+        <A HREF="http://www.google.{depends on your location}">here</A>.
         </BODY></HTML>
         
 
