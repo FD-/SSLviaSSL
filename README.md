@@ -35,7 +35,7 @@ I added tcpdumps of two runs to the `tcpdumps` directory:
       - Proxy server was squid3, running on port 8080, secured via an stunnel (stunnel4) on port 10443. 
       - HTTPS server was apache2, running on port 80 (HTTP) and 443 (HTTPS)
       - Server machine had IP 10.211.55.13
-      - Android device had IP 10.211.55.2      
+      - Client machine running JRE had IP 10.211.55.2      
 
 #  How to set up a [Secure Web Proxy][1]:
 These steps were tested on a vanilla Ubuntu 14.04 image.
