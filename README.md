@@ -75,6 +75,9 @@ These steps were tested on a vanilla Ubuntu 14.04 image.
         sudo cp stunnel.pem /etc/stunnel/
 
 6. Edit the stunnel config file at /etc/stunnel/stunnel.conf
+
+        sudo nano /etc/stunnel/stunnel.conf
+
 Use a config file like this:
 
         client = no
