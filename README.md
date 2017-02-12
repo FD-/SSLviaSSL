@@ -5,7 +5,7 @@ The app tries to send an HTTP request to an HTTPS server via a Secure Web Proxy 
 
 # Using the project
 To use the project, run a Secure Web Proxy using the steps below and modify PROXY_HOST and PROXY_PORT in Main.java accordingly. These values will be used as defaults when starting the Android app. Via the EditTexts, the values can be modified in the app.
-The main.java class can be run in the desktop JRE directly from within Android Studio. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within Android Studio's console.
+The Main.java class can be run in the desktop JRE directly from within Android Studio. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within Android Studio's console.
 
 # The issue
 When running the app on Android and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the Android app and the HTTPS server) fails with this exception:
