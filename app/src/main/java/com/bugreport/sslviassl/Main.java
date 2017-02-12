@@ -11,7 +11,7 @@ public class Main {
     // Default values for both MainActivity and Main
     public static final String PROXY_HOST = "10.211.55.13";
     public static final int PROXY_PORT = 10443;
-    public static final String DESTINATION_URL = "http://10.211.55.13";
+    public static final String DESTINATION_URL = "https://10.211.55.13";
 
     public static void main(String[] args) {
         SecureWebProxyThread thread = new SecureWebProxyThread(PROXY_HOST, PROXY_PORT, DESTINATION_URL);
