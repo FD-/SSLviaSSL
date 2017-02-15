@@ -19,7 +19,7 @@ public class HostUtils {
 		}
 
 		int colonPos = url.indexOf(":");
-		if (slashPos != -1) {
+		if (colonPos != -1) {
 			url = url.substring(0, colonPos);
 		}
 
@@ -43,7 +43,7 @@ public class HostUtils {
 		}
 
 		int colonPos = url.indexOf(":");
-		if (slashPos != -1) {
+		if (colonPos != -1) {
 			String portString = url.substring(colonPos);
 			return Integer.parseInt(portString, 10);
 		} else {
