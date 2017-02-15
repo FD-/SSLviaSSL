@@ -203,7 +203,7 @@ class SecureWebProxyThread extends Thread{
         try {
             String destinationHost = HostUtils.getHostFromUrl(mDestinationUrl);
             int destinationPort = HostUtils.getPortFromUrl(mDestinationUrl);
-            String path = mDestinationUrl.replace("https://", "").replace("http://", "").replace(destinationHost, "");
+            String path = mDestinationUrl.replace("https://", "").replace("http://", "").replace(destinationHost, "").replace(":" + destinationPort, "");
             if (path.length() == 0) path = "/";
 
             if (mProxyHost == null || mProxyHost.length() == 0){
