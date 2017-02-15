@@ -8,10 +8,11 @@ package com.bugreport.sslviassl;
  * The exact same code (SecureWebProxyThread) that fails on Android works in a desktop JRE.
  */
 public class Main {
-    // Default values for both MainActivity and Main
-    public static final String PROXY_HOST = "10.211.55.13";
+    // Default values for both MainActivity and Main.
+    // A simple Secure Web Proxy Server is contained in server/Server.java.
+    public static final String PROXY_HOST = "192.168.178.1";
     public static final int PROXY_PORT = 10443;
-    public static final String DESTINATION_URL = "https://10.211.55.13";
+    public static final String DESTINATION_URL = "https://google.com";
 
     public static void main(String[] args) {
         SecureWebProxyThread thread = new SecureWebProxyThread(PROXY_HOST, PROXY_PORT, DESTINATION_URL);
