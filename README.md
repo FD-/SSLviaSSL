@@ -4,8 +4,21 @@ This project demonstrates that creating an SSLSocket over an existing SSLSocket 
 The app tries to send an HTTP request to an HTTPS server via a Secure Web Proxy (HTTP proxy over SSL/TLS).
 
 # Using the project
-To use the project, run a Secure Web Proxy using the steps below and modify PROXY_HOST and PROXY_PORT in Main.java accordingly. These values will be used as defaults when starting the Android app. Via the EditTexts, the values can be modified in the app.
-The Main.java class can be run in the desktop JRE directly from within Android Studio. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within Android Studio's console.
+Follow these steps to use the project:
+
+1. Set up a Secure Web Proxy
+    - The easiest way is to run the Server included in server/Server.java:
+      In Android Studio, just right-click on Server.java and click "Run 'Server.main()'". 
+You'll have to create a keystore file and set the corresponding values is server/KeystoreHelper.java. 
+    - Alternatively, you can set up a Secure Web Proxy using 3rd-party programs by following the steps below.
+2. Modify PROXY_HOST and PROXY_PORT in Main.java to match the values of your Secure Web Proxy. 
+    - These values will be used when running the JRE program and will be used as defaults for the Android app.
+3. Start the Android app
+    - The exception that occurs at the second handshake will be shown in the app and printed to Logcat.
+4. Start the JRE program
+    - The Main.java class can be run in the desktop JRE directly from within Android Studio. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within Android Studio's console.
+    - You'll notice the same code that doesn't work on Android works in the desktop JRE.
+ 
 
 # The issue
 When running the app on Android and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the Android app and the HTTPS server) fails with this exception:
@@ -20,7 +33,9 @@ When running the app on Android and trying to fetch data from an HTTPS server vi
         at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:357)
     	... 2 more        
         
-This exception does not happen if the same code is run in a desktop JRE (which you can try by running Main.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) on Android.   
+This exception does not happen if the same code is run in a desktop JRE (which you can try by running Main.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) on Android.
+
+__Note:__ It seems like the specific error message depends on the Android version used (as they use different Security providers). The exception above occurs when using Android 7.1.1.
 
 # TCPDUMP
 I added tcpdumps of two runs to the `tcpdumps` directory. Dumps were taken with `sudo tcpdump -i any -s 0 -w file_name.tcpdump`;
@@ -37,7 +52,7 @@ I added tcpdumps of two runs to the `tcpdumps` directory. Dumps were taken with 
       - Server machine had IP 10.211.55.13
       - Client machine running JRE had IP 10.211.55.2      
 
-#  How to set up a [Secure Web Proxy][1]:
+#  How to set up a [Secure Web Proxy][1] using 3rd-party programs:
 These steps were tested on a vanilla Ubuntu 14.04 image.
 
 (Alternatively, Squid can be run via SSL without any external tool, but it has to be compiled specifically for that: http://wiki.squid-cache.org/Features/HTTPS)
