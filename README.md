@@ -8,9 +8,9 @@ Follow these steps to use the project:
 
 1. Set up a [Secure Web Proxy][1]
     - The easiest way is to run the Server included in server/Server.java:
-     * Create a keystore file: keytool -genkey -keystore keystore -keyalg RSA
-     * Set KEYSTORE_PATH and KEYSTORE_KEY in server/KeystoreHelper.java      
-     * In Android Studio, just right-click on Server.java and click "Run 'Server.main()'". 
+    - Create a keystore file: keytool -genkey -keystore keystore -keyalg RSA
+    - Set KEYSTORE_PATH and KEYSTORE_KEY in server/KeystoreHelper.java      
+    - In Android Studio, just right-click on Server.java and click "Run 'Server.main()'". 
       
     - Alternatively, you can set up a Secure Web Proxy using 3rd-party programs by following [the steps below](#how-to-set-up-a-secure-web-proxy-using-3rd-party-programs).
 2. Modify PROXY_HOST and PROXY_PORT in Main.java to match the values of your Secure Web Proxy. 
