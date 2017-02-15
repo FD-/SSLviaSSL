@@ -44,7 +44,7 @@ public class HostUtils {
 
 		int colonPos = url.indexOf(":");
 		if (colonPos != -1) {
-			String portString = url.substring(colonPos);
+			String portString = url.substring(colonPos + 1);
 			return Integer.parseInt(portString, 10);
 		} else {
 			if (isHttps){
