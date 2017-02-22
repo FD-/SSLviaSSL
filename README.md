@@ -36,6 +36,8 @@ When running the app on Android and trying to fetch data from an HTTPS server vi
         
 This exception does not happen if the same code is run in a desktop JRE (which you can try by running Main.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) on Android.
 
+Interestingly, there seems to be a very similar issue in the JRE version of the Conscrypt Provider used in recent Android versions: Instead of throwing an exception, the second handshake never finishes (SSLSocket.startHandshake() never returns). A sample project for the Conscrypt Provider can be found in the conscrypt branch of this repository.
+
 __Note:__ It seems like the specific error message depends on the Android version used (as they use different Security providers). The exception above occurs when using Android 7.1.1.
 
 # TCPDUMP
