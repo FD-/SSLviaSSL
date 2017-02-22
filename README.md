@@ -30,7 +30,7 @@ This issues do not occur if the same code is run using the desktop JRE default S
 
 Interestingly, on Android versions using the Conscrypt Provider, running an SSLSocket over another SSLSocket does not work either, but an exception is raised. Details on the behaviour on Android can be found in the master branch of this repository.
 
-#  How to set up a [Secure Web Proxy][1]:
+#  How to set up a [Secure Web Proxy][1] using 3d-party programs:
 These steps were tested on a vanilla Ubuntu 14.04 image.
 
 (Alternatively, Squid can be run via SSL without any external tool, but it has to be compiled specifically for that: http://wiki.squid-cache.org/Features/HTTPS)
