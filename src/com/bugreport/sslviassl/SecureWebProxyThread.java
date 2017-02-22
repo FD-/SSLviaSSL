@@ -158,6 +158,9 @@ class SecureWebProxyThread extends Thread{
             System.out.println("Enabled protocols are: " + Arrays.toString(sslSocket.getEnabledProtocols()));
             
             sslSocket.startHandshake();
+            
+            System.out.println("Handshake finished");
+            
             return sslSocket;
         } catch (KeyManagementException | NoSuchAlgorithmException e) {
             throw new IOException("Could not do SSL handshake: " + e);
