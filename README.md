@@ -20,7 +20,7 @@ Follow these steps to use the project (Project is thought to be used with Intell
     - Start by right-click on Main.java and clicking "Run 'Main.main()'". 
     - From the Console, you'll see the second handshake never finishes (Handshake finished is not printed for the second handshake)
 5. Test with the JRE-default SSL Provider
-    - Modify SecureWebProcyThread#doSSLHandshake() to use the default SSL Provider
+    - Modify [SecureWebProcyThread#doSSLHandshake()](./src/com/bugreport/sslviassl/SecureWebProxyThread.java#L144) to use the default SSL Provider
     - You'll notice the same code that doesn't work with Conscrypt works with the default SSL Provider
 
 # The issue
