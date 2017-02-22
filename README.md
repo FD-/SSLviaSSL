@@ -27,6 +27,7 @@ Follow these steps to use the project (Project is thought to be used with Intell
 When running the program using the Conscrypt SSL Provder and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the program and the HTTPS server) never finishes. It seems the call to startHandshake() just never returns.
         
 This issues do not occur if the same code is run using the desktop JRE default SSL provider (which you can try by changing the corresponding line in SecureWebProxyThread.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) in Conscrypt.
+
 Interestingly, on Android versions using the Conscrypt Provider, running an SSLSocket over another SSLSocket does not work either, but an exception is raised. Details on the behaviour on Android can be found in the master branch of this repository.
 
 #  How to set up a [Secure Web Proxy][1]:
