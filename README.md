@@ -4,8 +4,24 @@ This project demonstrates that creating an SSLSocket over an existing SSLSocket 
 This program tries to send an HTTP request to an HTTPS server via a Secure Web Proxy (HTTP proxy over SSL/TLS).
 
 # Using the project
-To use the project, run a Secure Web Proxy using the steps below and modify PROXY_HOST and PROXY_PORT in Main.java accordingly.
-The Main.java class can be run in the desktop JRE directly from within IntelliJ IDEA. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within IDEA's console.
+Follow these steps to use the project (Project is thought to be used with IntelliJ idea, but general steps work with any IDE):
+
+1. Set up the project:
+    - Add the Conscrypt project to the project dependencies
+2. Set up a [Secure Web Proxy][1]
+    - The easiest way is to run the Server included in server/Server.java:
+    - Create a keystore file: keytool -genkey -keystore keystore -keyalg RSA
+    - Set KEYSTORE_PATH and KEYSTORE_KEY in server/KeystoreHelper.java      
+    - In IntelliJ IDEA, just right-click on Server.java and click "Run 'Server.main()'".    
+    - Alternatively, you can set up a Secure Web Proxy using 3rd-party programs by following [the steps below](#how-to-set-up-a-secure-web-proxy-using-3rd-party-programs).
+3. Modify PROXY_HOST and PROXY_PORT in Main.java to match the values of your Secure Web Proxy. 
+    - These values will be passed to the SecureWebProxyThread.
+4. Start the Main program
+    - Start by right-click on Main.java and clicking "Run 'Main.main()'". 
+    - From the Console, you'll see the second handshake never finishes (Handshake finished is not printed for the second handshake)
+5. Test with the JRE-default SSL Provider
+    - Modify SecureWebProcyThread#doSSLHandshake() to use the default SSL Provider
+    - You'll notice the same code that doesn't work with Conscrypt works with the default SSL Provider
 
 # The issue
 When running the program using the Conscrypt SSL Provder and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the program and the HTTPS server) never finishes. It seems the call to startHandshake() just never returns.
