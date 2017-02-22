@@ -139,20 +139,22 @@ class SecureWebProxyThread extends Thread{
         System.out.println("Doing SSL handshake with " + host + ":" + port);
 
         try {
-            // TODO: Change to new OpenSSLProvider();
-            Provider provider = null;
+            //Provider provider = null; // Use JDK default provider => Works
+            Provider provider = new OpenSSLProvider(); // Use Conscrypt provider => Fails
 
             SSLContext sslContext;
             if (provider == null) {
-                sslContext = SSLContext.getInstance("SSL");
+                sslContext = SSLContext.getInstance("TLS");
             } else {
-                sslContext = SSLContext.getInstance("SSL", provider);
+                sslContext = SSLContext.getInstance("TLS", provider);
             }
             sslContext.init(null, trustAllCerts, new SecureRandom());
             SSLSocketFactory factory = sslContext.getSocketFactory();
+            
             SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, host, port, true);
-            System.out.println("Supported protocols are: " + Arrays.toString(sslSocket.getSupportedProtocols()));
-            sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
+            sslSocket.setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+            System.out.println("Enabled protocols are: " + Arrays.toString(sslSocket.getEnabledProtocols()));
+            
             sslSocket.startHandshake();
             return sslSocket;
         } catch (KeyManagementException | NoSuchAlgorithmException e) {
