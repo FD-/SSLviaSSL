@@ -1,41 +1,17 @@
 # SSLviaSSL
-This project demonstrates that creating an SSLSocket over an existing SSLSocket does not work on Android.
+This project demonstrates that creating an SSLSocket over an existing SSLSocket does not work when using the Conscrypt SSL provider.
 
-The app tries to send an HTTP request to an HTTPS server via a Secure Web Proxy (HTTP proxy over SSL/TLS).
+This program tries to send an HTTP request to an HTTPS server via a Secure Web Proxy (HTTP proxy over SSL/TLS).
 
 # Using the project
-To use the project, run a Secure Web Proxy using the steps below and modify PROXY_HOST and PROXY_PORT in Main.java accordingly. These values will be used as defaults when starting the Android app. Via the EditTexts, the values can be modified in the app.
-The Main.java class can be run in the desktop JRE directly from within Android Studio. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within Android Studio's console.
+To use the project, run a Secure Web Proxy using the steps below and modify PROXY_HOST and PROXY_PORT in Main.java accordingly.
+The Main.java class can be run in the desktop JRE directly from within IntelliJ IDEA. Just right-click the file and click "Run 'Main.main()'". This will execute the program in the desktop JRE and print the output within IDEA's console.
 
 # The issue
-When running the app on Android and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the Android app and the HTTPS server) fails with this exception:
-
-    javax.net.ssl.SSLHandshakeException: Handshake failed
-        at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:429)
-        at com.bugreport.sslviassl.SecureWebProxyThread.doSSLHandshake(SecureWebProxyThread.java:147)
-        at com.bugreport.sslviassl.SecureWebProxyThread.run(SecureWebProxyThread.java:216)
-    Caused by: javax.net.ssl.SSLProtocolException: SSL handshake aborted: ssl=0x74621f1a40: Failure in SSL library, usually a protocol error
-    error:100000e3:SSL routines:OPENSSL_internal:UNKNOWN_ALERT_TYPE (external/boringssl/src/ssl/s3_pkt.c:618 0x74705b3e7e:0x00000000)
-        at com.android.org.conscrypt.NativeCrypto.SSL_do_handshake(Native Method)
-        at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:357)
-    	... 2 more        
+When running the program using the Conscrypt SSL Provder and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the program and the HTTPS server) never finishes. It seems the call to startHandshake() just never returns.
         
-This exception does not happen if the same code is run in a desktop JRE (which you can try by running Main.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) on Android.   
-
-# TCPDUMP
-I added tcpdumps of two runs to the `tcpdumps` directory. Dumps were taken with `sudo tcpdump -i any -s 0 -w file_name.tcpdump`;
-- android_ssl_via_ssl.tcpdump:
-      - Taken from virtual machine hosting the proxy server and https server. 
-      - Proxy server was squid3, running on port 8080, secured via an stunnel (stunnel4) on port 10443. 
-      - HTTPS server was apache2, running on port 80 (HTTP) and 443 (HTTPS)
-      - Server machine had IP 10.211.55.13
-      - Android device had IP 10.211.55.2
-- jre_ssl_via_ssl.tcpdump:
-      - Taken from virtual machine hosting the proxy server and https server. 
-      - Proxy server was squid3, running on port 8080, secured via an stunnel (stunnel4) on port 10443. 
-      - HTTPS server was apache2, running on port 80 (HTTP) and 443 (HTTPS)
-      - Server machine had IP 10.211.55.13
-      - Client machine running JRE had IP 10.211.55.2      
+This issues do not occur if the same code is run using the desktop JRE default SSL provider (which you can try by changing the corresponding line in SecureWebProxyThread.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) in Conscrypt.
+Interestingly, on Android versions using the Conscrypt Provider, running an SSLSocket over another SSLSocket does not work either, but an exception is raised. Details on the behaviour on Android can be found in the master branch of this repository.
 
 #  How to set up a [Secure Web Proxy][1]:
 These steps were tested on a vanilla Ubuntu 14.04 image.
