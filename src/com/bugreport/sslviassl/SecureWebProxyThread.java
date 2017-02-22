@@ -118,6 +118,8 @@ class SecureWebProxyThread extends Thread{
     /**
      * Create an SSLSocket over the socket and do a handshake with the destination host described by
      * host and port.
+     * <br><b>NOTE:</b> With Conscrypt, running this function using an SSLSocket as socket leads to the 
+     * handshake getting stuck.
      * <br><b>NOTE:</b> On Android, running this function using an SSLSocket as socket leads to an
      * exception during the handshake.
      * @param socket The socket to run the SSLSocket over
