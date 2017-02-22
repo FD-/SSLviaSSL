@@ -9,7 +9,7 @@ import java.util.Enumeration;
 
 /**
  * Runs a simplified Secure Web Proxy.
- * Can be used as the server for the Android application (MainActivity.java) or the JDK equivalent
+ * Can be used as the server for the Android application (MainActivity.java) or the JRE equivalent
  * (Main.java).
  * If you are in Android-Studio, just right-click on the file in the Project view and
  * click "Run 'Server.main()'". This will execute the program in the desktop JRE.
