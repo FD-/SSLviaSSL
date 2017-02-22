@@ -138,7 +138,15 @@ class SecureWebProxyThread extends Thread{
         System.out.println("Doing SSL handshake with " + host + ":" + port);
 
         try {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
+            // TODO: Change to new OpenSSLProvider();
+            Provider provider = null;
+
+            SSLContext sslContext;
+            if (provider == null) {
+                sslContext = SSLContext.getInstance("SSL");
+            } else {
+                sslContext = SSLContext.getInstance("SSL", provider);
+            }
             sslContext.init(null, trustAllCerts, new SecureRandom());
             SSLSocketFactory factory = sslContext.getSocketFactory();
             SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, host, port, true);
