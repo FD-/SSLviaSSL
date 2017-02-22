@@ -35,6 +35,9 @@ public class SecureTunnel {
                 try {
                     SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
                     mServerSocket = (SSLServerSocket) factory.createServerSocket(mPort);
+                    
+                    mServerSocket.setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+                    System.out.println("Tunnel has enabled protocols: " + Arrays.toString(mServerSocket.getEnabledProtocols()));
 
                     while (!isInterrupted()){
                         try {
