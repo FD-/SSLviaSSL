@@ -22,7 +22,19 @@ Follow these steps to use the project:
  
 
 # The issue
-When running the app on Android and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the Android app and the HTTPS server) fails with this exception:
+When running the app on Android and trying to fetch data from an HTTPS server via the Secure Web Proxy (code in SecureWebProxyThread.java), the second handshake (the one between the Android app and the HTTPS server) fails with a SSLHandshakeException:
+
+    javax.net.ssl.SSLHandshakeException: Handshake failed
+        at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:422)
+        at com.bugreport.sslviassl.SecureWebProxyThread.doSSLHandshake(SecureWebProxyThread.java:147)
+        at com.bugreport.sslviassl.SecureWebProxyThread.run(SecureWebProxyThread.java:216)
+    Caused by: javax.net.ssl.SSLProtocolException: SSL handshake aborted: ssl=0x87583000: Failure in SSL library, usually a protocol error
+    error:10000066:SSL routines:OPENSSL_internal:BAD_ALERT (external/boringssl/src/ssl/tls_record.c:457 0x97734e47:0x00000000)
+        at com.android.org.conscrypt.NativeCrypto.SSL_do_handshake(Native Method)
+        at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:350)
+            ... 2 more
+(Exception as thrown by Android O Developer Preview)            
+            
 
     javax.net.ssl.SSLHandshakeException: Handshake failed
         at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:429)
@@ -32,13 +44,14 @@ When running the app on Android and trying to fetch data from an HTTPS server vi
     error:100000e3:SSL routines:OPENSSL_internal:UNKNOWN_ALERT_TYPE (external/boringssl/src/ssl/s3_pkt.c:618 0x74705b3e7e:0x00000000)
         at com.android.org.conscrypt.NativeCrypto.SSL_do_handshake(Native Method)
         at com.android.org.conscrypt.OpenSSLSocketImpl.startHandshake(OpenSSLSocketImpl.java:357)
-    	... 2 more        
+    	... 2 more  
+(Exception as thrown by Android 7.1.1)            
         
 This exception does not happen if the same code is run in a desktop JRE (which you can try by running Main.java), when no proxy is used, or when only an HTTP server (not HTTPS) is used. This clearly indicates there must be an issue with the second handshake (running an SSLSocket over an existing SSLSocket) on Android.
 
 Interestingly, there seems to be a very similar issue in the JRE version of the Conscrypt Provider used in recent Android versions: Instead of throwing an exception, the second handshake never finishes (SSLSocket.startHandshake() never returns). A sample project for the Conscrypt Provider can be found in the [conscrypt branch](https://github.com/FD-/SSLviaSSL/tree/conscrypt) of this repository.
 
-__Note:__ It seems like the specific error message depends on the Android version used (as they use different Security providers). The exception above occurs when using Android 7.1.1.
+__Note:__ It seems like the specific error message depends on the Android version used (as they use different Security providers). The exceptions listed above are from Android O Developer Preview 1 in an emulator and from Android N 7.1.1 on a Nexus 9.
 
 # TCPDUMP
 I added tcpdumps of two runs to the `tcpdumps` directory. Dumps were taken with `sudo tcpdump -i any -s 0 -w file_name.tcpdump`;
