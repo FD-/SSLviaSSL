@@ -154,10 +154,15 @@ class SecureWebProxyThread extends Thread{
             
             sslContext.init(null, trustAllCerts, new SecureRandom());
             SSLSocketFactory factory = sslContext.getSocketFactory();
-            SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, host, port, true);
-            System.out.println("Supported protocols are: " + Arrays.toString(sslSocket.getSupportedProtocols()));
-            sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
+            
+            SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, host, port, false);
+            sslSocket.setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+            System.out.println("Enabled protocols are: " + Arrays.toString(sslSocket.getEnabledProtocols()));
+
             sslSocket.startHandshake();
+
+            System.out.println("Handshake finished");
+
             return sslSocket;
         } catch (KeyManagementException | NoSuchAlgorithmException e) {
             throw new IOException("Could not do SSL handshake: " + e);
