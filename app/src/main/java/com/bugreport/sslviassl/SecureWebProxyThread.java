@@ -1,5 +1,7 @@
 package com.bugreport.sslviassl;
 
+import org.conscrypt.OpenSSLProvider;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -138,7 +140,18 @@ class SecureWebProxyThread extends Thread{
         System.out.println("Doing SSL handshake with " + host + ":" + port);
 
         try {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
+            // Uncomment to make Conscrypt use the engine-based sockets
+            // Conscrypt.SocketFactories.setUseEngineSocketByDefault(true);
+
+            Provider provider = new OpenSSLProvider(); // Use Conscrypt provider
+
+            SSLContext sslContext;
+            if (provider == null) {
+                sslContext = SSLContext.getInstance("TLS");
+            } else {
+                sslContext = SSLContext.getInstance("TLS", provider);
+            }
+            
             sslContext.init(null, trustAllCerts, new SecureRandom());
             SSLSocketFactory factory = sslContext.getSocketFactory();
             SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, host, port, true);
